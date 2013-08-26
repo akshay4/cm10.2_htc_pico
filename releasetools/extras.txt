@@ -7,12 +7,6 @@ lib/libvideoeditorplayer.so
 app/CMUpdater.apk
 app/Development.apk
 
-# Live Wallpapers (2.11MB)
-app/LiveWallpapers.apk
-app/MagicSmokeWallpapers.apk
-app/Galaxy4.apk
-app/PhaseBeam.apk
-
 # Ringtones (5.85MB)
 media/audio/ringtones/Acheron.ogg
 media/audio/ringtones/Andromeda.ogg
@@ -190,3 +184,4 @@ media/audio/ringtones/Enter_the_Nexus.ogg
 media/audio/ringtones/Nairobi.ogg
 media/audio/ringtones/Nassau.ogg
 media/audio/ringtones/Safari.ogg
+
