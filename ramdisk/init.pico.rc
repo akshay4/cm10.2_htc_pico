@@ -9,7 +9,7 @@ on early-init
     symlink /storage/sdcard0 /mnt/sdcard
 
 on post-fs-data
- # wifi
+    # wifi
     mkdir /data/misc 01771 system misc
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
@@ -17,9 +17,34 @@ on post-fs-data
     mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
+
+    # bluetooth power up/down interface
+    chown bluetooth bluetooth /dev/ttyHS0
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+
+    # Bluetooth MAC address path
+    chown bluetooth net_bt_stack /sys/module/htc_bdaddress/parameters/bdaddress
+    setprop ro.bt.bdaddr_path /sys/module/htc_bdaddress/parameters/bdaddress
+
+    # bluetooth car dock pin
+    chown system system /sys/class/switch/dock/bt_pin
+
+    # Create directory used by audio subsystem
+    mkdir /data/misc/audio 0770 audio audio
+
+    # Allow system to have access to /dev/tun directory
+    mkdir /dev/tun 0770 system vpn
+    chown system vpn /dev/tun
+    chmod 0770 /dev/tun
+
+    # Set indication (checked by vold) that we have finished this action
+    setprop vold.post_fs_data_done 1
     
 on boot
     mount debugfs /sys/kernel/debug /sys/kernel/debug
+    chmod 666 /proc/cmdline
 
 # Define the memory thresholds at which the above process classes will
 # be killed.  These numbers are in pages (4k).
@@ -32,22 +57,39 @@ on boot
     setprop ro.CONTENT_PROVIDER_MEM 7680
     setprop ro.EMPTY_APP_MEM 8192
 
-    # bluetooth power up/down interface
-    chown bluetooth net_bt_stack /dev/ttyHS0
-    chown bluetooth net_bt_stack /proc/bluetooth/sleep/proto
-    chmod 0600 /dev/ttyHS0
-    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
-    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
-    chown bluetooth net_bt_stack /proc/bluetooth/sleep/proto
+    # Power Management
+    chmod 0664 /sys/module/pm2/parameters/idle_sleep_mode
+    chown radio radio /sys/module/pm2/parameters/idle_sleep_mode
 
-    chown radio radio /sys/module/pm/parameters/idle_sleep_mode
+    # Disable idle power collapse to speed up the boot process
+    # Enable it when boot is complete
+    write /sys/module/pm2/parameters/idle_sleep_mode 3
 
-    # bluetooth MAC address programming
-    chown bluetooth bluetooth /sys/module/htc_bdaddress/parameters/bdaddress
-    setprop ro.bt.bdaddr_path /sys/module/htc_bdaddress/parameters/bdaddress
+    # for Optical sensors
+    chown system system /sys/class/optical_sensors/lightsensor/ls_adc
+    chown system system /sys/class/optical_sensors/lightsensor/ls_auto
+    chown system system /sys/class/optical_sensors/lightsensor/ls_kadc
+    chown system radio  /sys/class/optical_sensors/proximity/ps_adc
+    chown system system /sys/class/optical_sensors/proximity/ps_kadc
+    chmod 0666          /sys/class/optical_sensors/proximity/ps_kadc
 
-    # bluetooth car dock pin
-    chown system system /sys/class/switch/dock/bt_pin
+    # Radio_feedback permissions
+    chown radio radio /dev/radio_feedback
+    chmod 0660 /dev/radio_feedback
+
+    # for Flip to speaker
+    chown radio radio /sys/class/htc_accelerometer/accelerometer/PhoneOnOffFlag
+
+    # for charging function
+    chown radio radio /sys/module/htc_battery/parameters/phone_call
+    chmod 0660 /sys/module/htc_battery/parameters/phone_call
+
+    # to enable low charge current in voice call
+    chown radio radio /sys/class/power_supply/battery/charger_control
+    chmod 0660 /sys/class/power_supply/battery/charger_control
+
+    # for Slate charging timer
+    chown radio /sys/class/power_supply/battery/charger_timer
 
     # Permissions for Liblights.
     chown system system /sys/class/leds/green/brightness
@@ -70,23 +112,41 @@ on boot
     setprop net.tcp.buffersize.hsdpa 4096,174760,1572864,4096,16384,110208
     setprop net.tcp.buffersize.umts 4096,174760,1572864,4096,16384,110208
     setprop net.tcp.buffersize.edge 4096,174760,1572864,4096,16384,35040
-    setprop net.tcp.buffersize.gprs 4096,174760,1572864,4096,8760,11680 
+    setprop net.tcp.buffersize.gprs 4096,174760,1572864,4096,8760,11680
+
+    # To allow interfaces to get v6 address when tethering is enabled
+    write /proc/sys/net/ipv6/conf/rmnet0/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet1/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet2/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet3/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet4/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet5/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet6/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet7/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_sdio0/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_sdio1/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_sdio2/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_sdio3/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_sdio4/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_sdio5/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_sdio6/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_sdio7/accept_ra 2
 
     # for CM performance
     chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
-    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 
+    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+
+    # load kineto_gan.ko
+    insmod /system/lib/modules/kineto_gan.ko
 
 on fs
     # mount partitions
     mount_all /fstab.pico
-
+    
     # Enable low memory killer to check file pages
     write /sys/module/lowmemorykiller/parameters/minfile 0,0,0,5120,5632,6144
     write /sys/module/lowmemorykiller/parameters/check_filepages 1
-    
-    #usb tethering
-    chmod 0777 /sys/class/usb_composite/*
 
     # fix for entropy service and some other that failed
     # Need for NET
@@ -110,11 +170,28 @@ on fs
     setprop ro.ril.fd.scron.timeout 4
     setprop ro.ril.fd.scroff.timeout 3
 
-service hciattach /system/bin/logwrapper /system/bin/brcm_patchram_plus --no2bytes --tosleep=50000 --enable_hci --baudrate 3000000 --patchram /system/etc/firmware/BCM4330B1_002.001.003.0221.0228.hcd --scopcm=0,0,0,0,0,0,0,3,3,0 /dev/ttyHS0
-    user root
-    group bluetooth net_bt_admin net_bt_stack
-    disabled
-    oneshot
+    # Configure and enable KSM
+    write /sys/kernel/mm/ksm/pages_to_scan 600
+    write /sys/kernel/mm/ksm/sleep_millisecs 3000
+    write /sys/kernel/mm/ksm/run 1
+
+#service hciattach /system/bin/logwrapper /system/bin/brcm_patchram_plus --no2bytes --tosleep=50000 --enable_hci --baudrate 4000000 --patchram /system/etc/firmware/BCM4330B1_002.001.003.0221.0228.hcd --scopcm=0,0,0,0,0,0,0,3,3,0 /dev/ttyHS0
+#    user root
+#    group bluetooth net_bt_admin net_bt_stack
+#    disabled
+#    oneshot
+
+on property:sys.boot_completed=1
+    write /sys/module/pm2/parameters/idle_sleep_mode 1
+
+# QMUX must be in multiple groups to support external process connections
+service qmuxd /system/bin/qmuxd
+    class main
+    user radio
+    group radio audio bluetooth gps
+
+on property:init.svc.wpa_supplicant=stopped
+    stop dhcpcd
 
 service p2p_supplicant /system/bin/wpa_supplicant \
     -ieth0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -N \
@@ -169,15 +246,32 @@ service iprenew_p2p /system/bin/dhcpcd -n
     disabled
     oneshot
 
-service hostapd /system/bin/hostapd /data/misc/wifi/hostapd.conf
-    socket hostapd_eth0 dgram 660 wifi wifi
-    group wifi inet
+service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
+    class main
+    user root
+    group root
     oneshot
     disabled
 
-    # bugreport is triggered by the KEY_VOLUMEUP and BTN_MOUSE keycodes
+service zchgd_offmode /system/bin/zchgd -pseudooffmode
+    user root
+    group root graphics
+    disabled
+
+service zchgd_onmode /system/bin/zchgd -onmode
+    user root
+    group root graphics
+
+on property:dev.zcharge=true
+    start zchgd_onmode
+
+on property:dev.zcharge=false
+    stop zchgd_onmode
+
+# bugreport is triggered by the KEY_VOLUMEUP and BTN_MOUSE keycodes
 service bugreport /system/bin/dumpstate -d -v -o /sdcard/bugreports/bugreport
     class main
     disabled
     oneshot
     keycodes 115 272
+
