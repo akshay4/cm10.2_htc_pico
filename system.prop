@@ -28,7 +28,9 @@ ro.ril.enable.managed.roaming=1
 ro.ril.gprsclass=10
 ro.ril.oem.nosim.ecclist=911,112,999,000,08,118,120,122,110,119,995
 ro.ril.emc.mode=2
+ro.telephony.ril_class=HTCQualcommRIL
 ro.telephony.ril.v3=signalstrength,singlepdp,skipbrokendatacall
+telephony.lteOnCdmaDevice = 0
 ro.ril.htcmaskw1.bitmask = 4294967295
 ro.ril.htcmaskw1 = 14449
 ro.ril.update.acoustic.table = 1
@@ -53,13 +55,19 @@ persist.rild.nitz_short_ons_2=
 persist.rild.nitz_short_ons_3=
 DEVICE_PROVISIONED=1
 
+# For HSDPA low throughput
+ro.ril.disable.power.collapse = 1
+
+# Modify MTU from 1500 to 1428 on 3G network
+ro.ril.set.mtusize = 1428
+
 # Time between scans in seconds. Keep it high to minimize battery drain.
 # This only affects the case in which there are remembered access points,
 # but none are in range.
 wifi.supplicant_scan_interval=180
 wifi.interface=eth0
 wifi.softap.interface=eth0
- 
+
 # density in DPI of the LCD of this board. This is used to scale the UI
 # appropriately. If this property is not defined, the default value is 160 dpi.
 ro.sf.lcd_density = 160
@@ -91,8 +99,12 @@ dev.pm.dyn_sample_period=700000
 htc.audio.alc.enable   = 1
 htc.audio.swalt.enable = 1
 
+# Fix for audio distortion in calls
+#persist.audio.handset.mic=analog
+
 # Display
 debug.composition.7x25A.type=mdp
+debug.composition.type=gpu
 ro.hw_plat=7x27a
 ro.bq.gpu_to_cpu_unsupported=1
 media.stagefright.enable-player=true
@@ -120,12 +132,15 @@ debug.hwc.dynThreshold=1.9
 dalvik.vm.heapsize=48m
 ro.zram.default=0
 ro.sys.fw.bg_apps_limit=7
+sys.mem.max_hidden_apps=7
 dalvik.vm.checkjni=0
+dalvik.vm.checkjni=false
 dalvik.vm.dexopt-data-only=1
 dalvik.vm.dexopt-flags=v=a,o=v,m=y,u=y
 dalvik.vm.execution-mode=int:jit
 dalvik.vm.verify-bytecode=false
 dalvik.vm.lockprof.threshold=500
+dalvik.vm.heaptargetutilization=0.25
 
 # Misc
 ro.use_data_netmgrd=true
@@ -135,3 +150,8 @@ ro.config.sync=yes
 ro.phone_storage=0
 ro.kernel.android.checkjni=0
 ro.android.secure=0
+
+# Goo.im
+ro.goo.developerid=joilaroi
+ro.goo.rom=CM102pico
+ro.goo.version=1
