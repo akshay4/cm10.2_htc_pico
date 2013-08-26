@@ -17,29 +17,29 @@
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
+# Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+
+# Install/Uninstall google apps
+$(call inherit-product, vendor/google/gapps_armv6_tiny.mk)
+
 DEVICE_PACKAGE_OVERLAYS += device/htc/pico/overlay
 
-# Video decoding
-PRODUCT_PACKAGES += \
-    libmm-omxcore \
-    libstagefrighthw \
-    libOmxCore \
-    libI420colorconvert \
-    libdashplayer \
-    qcmediaplayer
-    
 # Graphics 
 PRODUCT_PACKAGES += \
     copybit.msm7x27a \
     gralloc.msm7x27a \
     hwcomposer.msm7x27a \
-    libtilerenderer
+    libgenlock \
+    libtilerenderer \
+    libqdMetaData
     
 # Audio
 PRODUCT_PACKAGES += \
     audio.primary.msm7x27a \
     audio_policy.msm7x27a \
     audio.a2dp.default \
+    audio.usb.default \
     audio_policy.conf \
     libaudioutils
 
@@ -49,14 +49,40 @@ PRODUCT_PACKAGES += \
     lights.pico \
     gps.msm7x27a \
     librpc \
+    power.msm7x27a \
     com.android.future.usb.accessory \
-    libnetcmdiface \
-    power.msm7x27a
+    libnetcmdiface
     
 # Camera
 PRODUCT_PACKAGES += \
     camera.default \
     libsurfaceflinger_client
+
+# Video decoding
+PRODUCT_PACKAGES += \
+    libmm-omxcore \
+    libstagefrighthw \
+    libOmxCore \
+    libI420colorconvert \
+    libdashplayer \
+    qcmediaplayer
+
+# Bluetooh
+PRODUCT_PACKAGES += \
+    brcm_patchram_plus
+
+# Build sim toolkit
+PRODUCT_PACKAGES += \
+    Stk
+
+# off-mode charging
+PRODUCT_PACKAGES += \
+    charger \
+    charger_res_images
+
+# Goo.im app
+PRODUCT_PACKAGES += \
+    GooManager
     
 # Hardware properties 
 PRODUCT_COPY_FILES += \
@@ -78,10 +104,10 @@ PRODUCT_COPY_FILES += \
 
 # Init
 PRODUCT_COPY_FILES += \
-    device/htc/pico/fstab.pico:root/fstab.pico \
-    device/htc/pico/files/init.pico.rc:root/init.pico.rc \
-    device/htc/pico/files/ueventd.pico.rc:root/ueventd.pico.rc \
-    device/htc/pico/files/init.pico.usb.rc:root/init.pico.usb.rc
+    $(LOCAL_PATH)/ramdisk/fstab.pico:root/fstab.pico \
+    $(LOCAL_PATH)/ramdisk/init.pico.rc:root/init.pico.rc \
+    $(LOCAL_PATH)/ramdisk/ueventd.pico.rc:root/ueventd.pico.rc \
+    $(LOCAL_PATH)/ramdisk/init.pico.usb.rc:root/init.pico.usb.rc
     
 # Camera
 PRODUCT_COPY_FILES += \
@@ -134,17 +160,16 @@ PRODUCT_PACKAGES += \
 
 #Bluetooth conf
 PRODUCT_COPY_FILES += \
-    system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf \
-    device/htc/pico/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+    system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf
 
 # Wifi
 PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/etc/firmware/fw_bcm4330_b2.bin:system/etc/firmware/fw_bcm4330_b2.bin \
     device/htc/pico/prebuilt/etc/firmware/fw_bcm4330_apsta_b2.bin:system/etc/firmware/fw_bcm4330_apsta_b2.bin \
     device/htc/pico/prebuilt/etc/firmware/fw_bcm4330_p2p_b2.bin:system/etc/firmware/fw_bcm4330_p2p_b2.bin \
-    device/htc/pico/files/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-    device/htc/pico/files/etc/dhcpd/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
-    device/htc/pico/files/etc/wifi/hostapd.conf:system/etc/wifi/hostapd.conf 
+    device/htc/pico/prebuilt/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+    device/htc/pico/prebuilt/etc/dhcpd/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
+    device/htc/pico/prebuilt/etc/wifi/hostapd.conf:system/etc/wifi/hostapd.conf
     
 # Audio
 PRODUCT_COPY_FILES += \
@@ -158,6 +183,10 @@ PRODUCT_COPY_FILES += \
     vendor/htc/pico/proprietary/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so \
     device/htc/pico/prebuilt/lib/libaudioalsa.so:obj/lib/libaudioalsa.so \
     device/htc/pico/prebuilt/lib/libaudioalsa.so:system/lib/libaudioalsa.so \
+    device/htc/pico/prebuilt/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt
+
+#    device/htc/pico/prebuilt/lib/libaudioeq.so:system/lib/libaudioeq.so \
+#    device/htc/pico/prebuilt/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so \
 
 # Sensors
 PRODUCT_COPY_FILES += \
@@ -184,7 +213,8 @@ PRODUCT_COPY_FILES += \
 # RIL
 PRODUCT_COPY_FILES += \
     vendor/htc/pico/proprietary/lib/libhtc_ril.so:system/lib/libhtc_ril.so \
-    vendor/htc/pico/proprietary/lib/libqc-opt.so:system/lib/libqc-opt.so
+    vendor/htc/pico/proprietary/lib/libqc-opt.so:system/lib/libqc-opt.so \
+    vendor/htc/pico/proprietary/bin/qmuxd:system/bin/qmuxd
 
 # Audio DSP Profiles
 PRODUCT_COPY_FILES += \
@@ -204,7 +234,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/bin/bma150_usr:system/bin/bma150_usr \
     device/htc/pico/prebuilt/bin/htc_ebdlogd:system/bin/htc_ebdlogd \
-    device/htc/pico/prebuilt/bin/logcat2:system/bin/logcat2
+    device/htc/pico/prebuilt/bin/logcat2:system/bin/logcat2 \
+    vendor/htc/pico/proprietary/bin/charging:system/bin/charging \
+    vendor/htc/pico/proprietary/bin/zchgd:system/bin/zchgd
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
