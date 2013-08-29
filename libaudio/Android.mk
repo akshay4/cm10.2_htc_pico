@@ -8,7 +8,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-   AudioHardware.cpp \
+    AudioHardware.cpp \
     audio_hw_hal.cpp \
     HardwarePinSwitching.c
 
@@ -45,6 +45,10 @@ ifeq ($(BOARD_USES_QCOM_AUDIO_RESETALL),true)
     LOCAL_CFLAGS += -DWITH_QCOM_RESETALL
 endif
 
+# hack for prebuilt
+$(shell mkdir -p $(OUT)/obj/SHARED_LIBRARIES/libaudioalsa_intermediates/)
+$(shell touch $(OUT)/obj/SHARED_LIBRARIES/libaudioalsa_intermediates/export_includes)
+
 LOCAL_CFLAGS += -DQCOM_VOIP_ENABLED
 LOCAL_CFLAGS += -DQCOM_TUNNEL_LPA_ENABLED
 
@@ -52,6 +56,7 @@ LOCAL_SHARED_LIBRARIES := \
     libcutils       \
     libutils        \
     libmedia        \
+    libaudioalsa
 
 ifneq ($(TARGET_SIMULATOR),true)
 LOCAL_SHARED_LIBRARIES += libdl
@@ -109,6 +114,10 @@ LOCAL_MODULE_TAGS := optional
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
   LOCAL_CFLAGS += -DWITH_A2DP
+endif
+
+ifeq ($(BOARD_USES_QCOM_AUDIO_LPA),true)
+    LOCAL_CFLAGS += -DQCOM_TUNNEL_LPA_ENABLED
 endif
 
 LOCAL_C_INCLUDES := hardware/libhardware_legacy/audio
