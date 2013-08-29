@@ -18,8 +18,11 @@
     <bool name="needsHTCCamMode">true</bool>
 
     <!-- Disable face detection on the rear camera -->
-    <bool name="noFaceDetectOnRearCamera">true</bool>
+<!--     <bool name="noFaceDetectOnRearCamera">true</bool> -->
 
     <!-- Disable software HDR on non-hw HDR devices -->
     <bool name="disableSoftwareHDR">true</bool>
+
+    <!-- Allows setting video size before recording starts -->
+    <bool name="needsEarlyVideoSize">true</bool>
 </resources>
