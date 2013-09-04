@@ -260,9 +260,11 @@ struct msmfb_data {
 struct msmfb_overlay_data {
 	uint32_t id;
 	struct msmfb_data data;
+#ifndef CONFIG_FB_MSM_OVERLAY_LEGACY
 	uint32_t version_key;
 	struct msmfb_data plane1_data;
 	struct msmfb_data plane2_data;
+#endif
 };
 
 struct msmfb_img {
@@ -299,7 +301,9 @@ struct mdp_overlay {
 	uint32_t flags;
 	uint32_t id;
 	uint32_t user_data[8];
+#ifndef CONFIG_FB_MSM_OVERLAY_LEGACY
 	struct dpp_ctrl dpp;
+#endif
 };
 
 struct msmfb_overlay_3d {
