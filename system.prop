@@ -70,7 +70,7 @@ htc.audio.swalt.enable = 1
 
 # Display
 debug.composition.7x25A.type=mdp
-debug.composition.type=gpu
+debug.composition.type=mdp
 ro.hw_plat=7x27a
 ro.bq.gpu_to_cpu_unsupported=1
 ro.max.fling_velocity=4000
@@ -83,8 +83,8 @@ debug.qc.hardware=true
 debug.enabletr=false
 debug.hwui.render_dirty_regions=false
 debug.sf.hw=1
-ro.staticwallpaper.pixelformat=RGB_565
 debug.hwc.dynThreshold=1.9
+debug.fb.rgb565=0
 
 # Media
 ro.media.enc.jpeg.quality=100
@@ -109,6 +109,7 @@ dalvik.vm.execution-mode=int:jit
 dalvik.vm.verify-bytecode=false
 dalvik.vm.lockprof.threshold=500
 dalvik.vm.heaptargetutilization=0.25
+dalvik.vm.debug.alloc=0
 
 # Misc
 ro.use_data_netmgrd=true

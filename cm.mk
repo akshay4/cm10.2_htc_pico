@@ -11,6 +11,17 @@ DEVICE_PACKAGE_OVERLAYS += device/htc/pico/overlay
 $(call inherit-product, vendor/cm/config/common_mini_phone.mk)
 $(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
+# Optional CM packages
+PRODUCT_PACKAGES += \
+    HoloSpiralWallpaper \
+    MagicSmokeWallpapers \
+    NoiseField \
+    Galaxy4 \
+    LiveWallpapers \
+    LiveWallpapersPicker \
+    VisualizationWallpapers \
+    PhaseBeam
+
 # Inherit device configuration
 $(call inherit-product, device/htc/pico/pico.mk)
 
