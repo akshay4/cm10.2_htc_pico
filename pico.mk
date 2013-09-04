@@ -31,6 +31,7 @@ PRODUCT_PACKAGES += \
     gralloc.msm7x27a \
     hwcomposer.msm7x27a \
     libgenlock \
+    liboverlay \
     libtilerenderer \
     libqdMetaData
     
@@ -63,9 +64,7 @@ PRODUCT_PACKAGES += \
     libmm-omxcore \
     libstagefrighthw \
     libOmxCore \
-    libI420colorconvert \
-    libdashplayer \
-    qcmediaplayer
+    libdashplayer
 
 # Bluetooh
 PRODUCT_PACKAGES += \
@@ -74,11 +73,6 @@ PRODUCT_PACKAGES += \
 # Build sim toolkit
 PRODUCT_PACKAGES += \
     Stk
-
-# off-mode charging
-PRODUCT_PACKAGES += \
-    charger \
-    charger_res_images
 
 # Goo.im app
 PRODUCT_PACKAGES += \
@@ -180,11 +174,11 @@ PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/etc/AudioPreProcess.csv:system/etc/AudioPreProcess.csv \
     device/htc/pico/prebuilt/etc/AudioFilter_HP.csv:system/etc/AudioFilter_HP.csv \
     vendor/htc/pico/proprietary/lib/libaudioeq.so:system/lib/libaudioeq.so \
-    vendor/htc/pico/proprietary/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so \
-    device/htc/pico/prebuilt/lib/libaudioalsa.so:obj/lib/libaudioalsa.so \
-    device/htc/pico/prebuilt/lib/libaudioalsa.so:system/lib/libaudioalsa.so \
-    device/htc/pico/prebuilt/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt
+    vendor/htc/pico/proprietary/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so
 
+#    device/htc/pico/prebuilt/lib/libaudioalsa.so:obj/lib/libaudioalsa.so \
+#    device/htc/pico/prebuilt/lib/libaudioalsa.so:system/lib/libaudioalsa.so
+#    device/htc/pico/prebuilt/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt
 #    device/htc/pico/prebuilt/lib/libaudioeq.so:system/lib/libaudioeq.so \
 #    device/htc/pico/prebuilt/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so \
 
@@ -237,6 +231,33 @@ PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/bin/logcat2:system/bin/logcat2 \
     vendor/htc/pico/proprietary/bin/charging:system/bin/charging \
     vendor/htc/pico/proprietary/bin/zchgd:system/bin/zchgd
+
+# charger images
+PRODUCT_COPY_FILES += \
+    vendor/htc/pico/proprietary/media/zchgd/batt_0.rle:system/media/zchgd/batt_0.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_100.rle:system/media/zchgd/batt_100.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_10.rle:system/media/zchgd/batt_10.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_20.rle:system/media/zchgd/batt_20.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_30.rle:system/media/zchgd/batt_30.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_40.rle:system/media/zchgd/batt_40.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_50.rle:system/media/zchgd/batt_50.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_5.rle:system/media/zchgd/batt_5.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_60.rle:system/media/zchgd/batt_60.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_70.rle:system/media/zchgd/batt_70.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_80.rle:system/media/zchgd/batt_80.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_90.rle:system/media/zchgd/batt_90.rle \
+    vendor/htc/pico/proprietary/media/zchgd/batt_95.rle:system/media/zchgd/batt_95.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_00.rle:system/media/zchgd/charging_00.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_01.rle:system/media/zchgd/charging_01.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_02.rle:system/media/zchgd/charging_02.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_03.rle:system/media/zchgd/charging_03.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_04.rle:system/media/zchgd/charging_04.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_05.rle:system/media/zchgd/charging_05.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_06.rle:system/media/zchgd/charging_06.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_07.rle:system/media/zchgd/charging_07.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_08.rle:system/media/zchgd/charging_08.rle \
+    vendor/htc/pico/proprietary/media/zchgd/charging_09.rle:system/media/zchgd/charging_09.rle \
+    vendor/htc/pico/proprietary/media/zchgd/error.rle:system/media/zchgd/error.rle
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
