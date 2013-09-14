@@ -3,9 +3,10 @@ app/VideoEditor.apk
 lib/libvideoeditor_jni.so
 lib/libvideoeditorplayer.so
 
-# CM Wallpapers (7MB)
+# Apps
 app/CMUpdater.apk
 app/Development.apk
+app/Focal.apk
 
 # Ringtones (5.85MB)
 media/audio/ringtones/Acheron.ogg
