@@ -123,4 +123,4 @@ ro.android.secure=0
 # Goo.im
 ro.goo.developerid=joilaroi
 ro.goo.rom=CM102pico
-ro.goo.version=3
+ro.goo.version=4
