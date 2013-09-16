@@ -8,6 +8,12 @@ app/CMUpdater.apk
 app/Development.apk
 app/Focal.apk
 
+# Live Wallpapers (2.11MB)
+app/LiveWallpapers.apk
+app/MagicSmokeWallpapers.apk
+app/Galaxy4.apk
+app/PhaseBeam.apk
+
 # Ringtones (5.85MB)
 media/audio/ringtones/Acheron.ogg
 media/audio/ringtones/Andromeda.ogg
