@@ -52,11 +52,12 @@ PRODUCT_PACKAGES += \
     librpc \
     power.msm7x27a \
     com.android.future.usb.accessory \
-    libnetcmdiface
+    libnetcmdiface \
+    HwaSettings
     
 # Camera
 PRODUCT_PACKAGES += \
-    camera.default \
+    camera.msm7x27a \
     libsurfaceflinger_client
 
 # Video decoding
@@ -105,7 +106,7 @@ PRODUCT_COPY_FILES += \
     
 # Camera
 PRODUCT_COPY_FILES += \
-    vendor/htc/pico/proprietary/lib/hw/camera.default.so:system/lib/hw/camera.default.so \
+    device/htc/pico/prebuilt/lib/hw/vendor-camera.default.so:system/lib/hw/vendor-camera.default.so \
     vendor/htc/pico/proprietary/lib/liboemcamera.so:system/lib/liboemcamera.so \
     vendor/htc/pico/proprietary/lib/libmmipl.so:system/lib/libmmipl.so \
     vendor/htc/pico/proprietary/lib/libmmjpeg.so:obj/lib/libmmjpeg.so \
@@ -174,11 +175,11 @@ PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/etc/AudioPreProcess.csv:system/etc/AudioPreProcess.csv \
     device/htc/pico/prebuilt/etc/AudioFilter_HP.csv:system/etc/AudioFilter_HP.csv \
     vendor/htc/pico/proprietary/lib/libaudioeq.so:system/lib/libaudioeq.so \
-    vendor/htc/pico/proprietary/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so
+    vendor/htc/pico/proprietary/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so \
+    device/htc/pico/prebuilt/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt
 
 #    device/htc/pico/prebuilt/lib/libaudioalsa.so:obj/lib/libaudioalsa.so \
 #    device/htc/pico/prebuilt/lib/libaudioalsa.so:system/lib/libaudioalsa.so
-#    device/htc/pico/prebuilt/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt
 #    device/htc/pico/prebuilt/lib/libaudioeq.so:system/lib/libaudioeq.so \
 #    device/htc/pico/prebuilt/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so \
 
@@ -231,6 +232,14 @@ PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/bin/logcat2:system/bin/logcat2 \
     vendor/htc/pico/proprietary/bin/charging:system/bin/charging \
     vendor/htc/pico/proprietary/bin/zchgd:system/bin/zchgd
+
+# Widevine libraries
+PRODUCT_COPY_FILES += \
+    vendor/htc/pico/proprietary/lib/libWVphoneAPI.so:system/lib/libWVphoneAPI.so \
+    vendor/htc/pico/proprietary/lib/libwvm.so:system/lib/libwvm.so \
+    vendor/htc/pico/proprietary/lib/libwvdrm_L3.so:system/lib/libwvdrm_L3.so \
+    vendor/htc/pico/proprietary/lib/libWVStreamControlAPI_L3.so:system/lib/libWVStreamControlAPI_L3.so
+
 
 # charger images
 PRODUCT_COPY_FILES += \
