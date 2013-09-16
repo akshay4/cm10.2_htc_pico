@@ -28,7 +28,7 @@
 #include <sys/stat.h>
 #include <dlfcn.h>
 #include <fcntl.h>
-#include <cutils/properties.h>
+#include <cutils/properties.h> // for property_get
 
 // hardware specific functions
 
@@ -44,12 +44,12 @@ extern "C" {
 #include <linux/msm_audio_mvs.h>
 #endif
 
+
 #define COMBO_DEVICE_SUPPORTED // Headset speaker combo device not supported on this target
 #define DUALMIC_KEY "dualmic_enabled"
 #define TTY_MODE_KEY "tty_mode"
 #define ECHO_SUPRESSION "ec_supported"
 #define VOIPRATE_KEY "voip_rate"
-#define DSP_EFFECT_KEY "dolby_srs_eq"
 namespace android_audio_legacy {
 
 #ifdef SRS_PROCESSING
@@ -144,6 +144,7 @@ static uint32_t SND_DEVICE_CARKIT=-1;
 static uint32_t SND_DEVICE_FM_SPEAKER=-1;
 static uint32_t SND_DEVICE_FM_HEADSET=-1;
 static uint32_t SND_DEVICE_NO_MIC_HEADSET=-1;
+static uint32_t SND_DEVICE_STEREO_HEADSET=-1;
 static uint32_t SND_DEVICE_FM_DIGITAL_STEREO_HEADSET=-1;
 static uint32_t SND_DEVICE_FM_DIGITAL_SPEAKER_PHONE=-1;
 static uint32_t SND_DEVICE_FM_DIGITAL_BT_A2DP_HEADSET=-1;
@@ -212,11 +213,12 @@ mDirectOutrefCnt(0)
                 CHECK_FOR(HANDSET);
                 CHECK_FOR(SPEAKER);
                 CHECK_FOR(BT);
+                CHECK_FOR(CARKIT);
                 CHECK_FOR(BT_EC_OFF);
                 CHECK_FOR(HEADSET);
                 CHECK_FOR(NO_MIC_HEADSET);
+                CHECK_FOR(STEREO_HEADSET);
                 CHECK_FOR(STEREO_HEADSET_AND_SPEAKER);
-                CHECK_FOR(CARKIT);
                 CHECK_FOR(IN_S_SADC_OUT_HANDSET);
                 CHECK_FOR(IN_S_SADC_OUT_SPEAKER_PHONE);
                 CHECK_FOR(TTY_HEADSET);
@@ -1688,6 +1690,7 @@ status_t AudioHardware::setMasterVolume(float v)
     set_volume_rpc(SND_DEVICE_BT,      SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_HEADSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_NO_MIC_HEADSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_STEREO_HEADSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_IN_S_SADC_OUT_HANDSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_IN_S_SADC_OUT_SPEAKER_PHONE, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_TTY_HEADSET, SND_METHOD_VOICE, 1, m7xsnddriverfd);
@@ -1933,10 +1936,6 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input, int outputDevice)
             new_snd_device = SND_DEVICE_CARKIT;
         } else if (outputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADSET) {
             ALOGI("Routing audio to Wired Headset\n");
-            new_snd_device = SND_DEVICE_HEADSET;
-            new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
-		} else if (outputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADPHONE) {
-            ALOGI("Routing audio to Wired Headphone\n");
             new_snd_device = SND_DEVICE_HEADSET;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
         } else if (outputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADPHONE) {
@@ -2496,6 +2495,7 @@ status_t AudioHardware::AudioStreamOutMSM72xx::set(
     uint32_t lChannels = pChannels ? *pChannels : 0;
     uint32_t lRate = pRate ? *pRate : 0;
 
+    ALOGE("set1 lFormat = %d lChannels= %u lRate = %u\n", lFormat, lChannels, lRate );
     mHardware = hw;
 
     // fix up defaults
