@@ -174,14 +174,12 @@ PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/etc/AudioPara4_WB.csv:system/etc/AudioPara4_WB.csv \
     device/htc/pico/prebuilt/etc/AudioPreProcess.csv:system/etc/AudioPreProcess.csv \
     device/htc/pico/prebuilt/etc/AudioFilter_HP.csv:system/etc/AudioFilter_HP.csv \
-    vendor/htc/pico/proprietary/lib/libaudioeq.so:system/lib/libaudioeq.so \
-    vendor/htc/pico/proprietary/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so \
+    device/htc/pico/prebuilt/lib/libaudioeq.so:system/lib/libaudioeq.so \
+    device/htc/pico/prebuilt/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so \
     device/htc/pico/prebuilt/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt
 
 #    device/htc/pico/prebuilt/lib/libaudioalsa.so:obj/lib/libaudioalsa.so \
 #    device/htc/pico/prebuilt/lib/libaudioalsa.so:system/lib/libaudioalsa.so
-#    device/htc/pico/prebuilt/lib/libaudioeq.so:system/lib/libaudioeq.so \
-#    device/htc/pico/prebuilt/lib/libhtc_acoustic.so:system/lib/libhtc_acoustic.so \
 
 # Sensors
 PRODUCT_COPY_FILES += \
@@ -232,6 +230,14 @@ PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/bin/logcat2:system/bin/logcat2 \
     vendor/htc/pico/proprietary/bin/charging:system/bin/charging \
     vendor/htc/pico/proprietary/bin/zchgd:system/bin/zchgd
+
+# Widevine libraries
+PRODUCT_COPY_FILES += \
+    vendor/htc/pico/proprietary/lib/libWVphoneAPI.so:system/lib/libWVphoneAPI.so \
+    vendor/htc/pico/proprietary/lib/libwvm.so:system/lib/libwvm.so \
+    vendor/htc/pico/proprietary/lib/libwvdrm_L3.so:system/lib/libwvdrm_L3.so \
+    vendor/htc/pico/proprietary/lib/libWVStreamControlAPI_L3.so:system/lib/libWVStreamControlAPI_L3.so
+
 
 # charger images
 PRODUCT_COPY_FILES += \
