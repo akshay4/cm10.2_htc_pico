@@ -233,14 +233,6 @@ PRODUCT_COPY_FILES += \
     vendor/htc/pico/proprietary/bin/charging:system/bin/charging \
     vendor/htc/pico/proprietary/bin/zchgd:system/bin/zchgd
 
-# Widevine libraries
-PRODUCT_COPY_FILES += \
-    vendor/htc/pico/proprietary/lib/libWVphoneAPI.so:system/lib/libWVphoneAPI.so \
-    vendor/htc/pico/proprietary/lib/libwvm.so:system/lib/libwvm.so \
-    vendor/htc/pico/proprietary/lib/libwvdrm_L3.so:system/lib/libwvdrm_L3.so \
-    vendor/htc/pico/proprietary/lib/libWVStreamControlAPI_L3.so:system/lib/libWVStreamControlAPI_L3.so
-
-
 # charger images
 PRODUCT_COPY_FILES += \
     vendor/htc/pico/proprietary/media/zchgd/batt_0.rle:system/media/zchgd/batt_0.rle \
